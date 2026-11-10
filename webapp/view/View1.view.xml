@@ -1,0 +1,99 @@
+
+<mvc:View
+    controllerName="com.portfolio.purchase.purchaserequestfrontend.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        id="page"
+        title="Gestión de Solicitudes de Compra">
+
+        <content>
+            <VBox class="sapUiResponsiveContentPadding">
+
+                <OverflowToolbar>
+                    <Title
+                        text="Solicitudes de compra"
+                        level="H2" />
+
+                    <ToolbarSpacer />
+
+                    <Button
+                        text="Nueva solicitud"
+                        icon="sap-icon://add"
+                        type="Emphasized"
+                        press=".onCreateRequest" />
+                </OverflowToolbar>
+
+                <Toolbar>
+                    <SearchField
+                        id="searchField"
+                        width="100%"
+                        placeholder="Buscar por número de solicitud"
+                        liveChange=".onSearch" />
+                </Toolbar>
+
+                <Table
+                    id="requestsTable"
+                    growing="true"
+                    growingThreshold="10"
+                    noDataText="No se encontraron solicitudes"
+                    items="{/PurchaseRequests}">
+
+                    <columns>
+                        <Column>
+                            <Text text="N° Solicitud" />
+                        </Column>
+
+                        <Column>
+                            <Text text="Fecha" />
+                        </Column>
+
+                        <Column>
+                            <Text text="Justificación" />
+                        </Column>
+
+                        <Column>
+                            <Text text="Estado" />
+                        </Column>
+
+                        <Column hAlign="End">
+                            <Text text="Importe" />
+                        </Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem type="Navigation">
+                            <cells>
+                                <ObjectIdentifier
+                                    title="{requestNumber}" />
+
+                                <Text text="{requestDate}" />
+
+                                <Text text="{justification}" />
+
+                                <ObjectStatus
+                                    text="{
+                                        path: 'status',
+                                        formatter: '.formatStatusText'
+                                    }"
+                                    state="{
+                                        path: 'status',
+                                        formatter: '.formatStatusState'
+                                    }" />
+
+                                <ObjectNumber
+                                    number="{totalAmount}"
+                                    unit="PEN" />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+
+                </Table>
+
+            </VBox>
+        </content>
+    </Page>
+
+</mvc:View>
