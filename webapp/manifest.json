@@ -10,6 +10,21 @@
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
     "resources": "resources.json",
+    "crossNavigation": {
+      "inbounds": {
+        "PurchaseRequest-display": {
+          "semanticObject": "PurchaseRequest",
+          "action": "display",
+          "title": "{{appTitle}}",
+          "subTitle": "{{appDescription}}",
+          "icon": "sap-icon://cart",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    },
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
       "version": "1.34.0",
@@ -113,5 +128,9 @@
       "id": "App",
       "async": true
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "comportfoliopurchasepurchaserequestfrontend"
   }
 }
