@@ -1,0 +1,156 @@
+
+<mvc:View
+    controllerName="com.portfolio.purchase.purchaserequestfrontend.controller.CreateRequest"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form">
+
+    <Page
+        id="createRequestPage"
+        title="Nueva solicitud de compra"
+        showNavButton="true"
+        navButtonPress=".onNavBack">
+
+        <content>
+            <VBox class="sapUiResponsiveContentPadding">
+
+                <form:SimpleForm
+                    editable="true"
+                    layout="ResponsiveGridLayout">
+
+                    <Label text="Fecha de solicitud" />
+
+                    <DatePicker
+                        id="requestDate"
+                        displayFormat="dd/MM/yyyy"
+                        valueFormat="yyyy-MM-dd" />
+
+                    <Label text="Justificación" />
+
+                    <TextArea
+                        id="justification"
+                        rows="4"
+                        width="100%"
+                        maxLength="500"
+                        placeholder="Ingrese el motivo de la solicitud" />
+
+                </form:SimpleForm>
+
+                <OverflowToolbar>
+                    <Title
+                        text="Productos o servicios"
+                        level="H3" />
+
+                    <ToolbarSpacer />
+
+                    <Button
+                        text="Agregar ítem"
+                        icon="sap-icon://add"
+                        press=".onAddItem" />
+                </OverflowToolbar>
+
+                <Table
+                    id="itemsTable"
+                    noDataText="Agregue productos o servicios"
+                    items="{form>/items}">
+
+                    <columns>
+                        <Column>
+                            <Text text="Descripción" />
+                        </Column>
+
+                        <Column>
+                            <Text text="Cantidad" />
+                        </Column>
+
+                        <Column>
+                            <Text text="Precio unitario" />
+                        </Column>
+
+                        <Column hAlign="End">
+                            <Text text="Subtotal" />
+                        </Column>
+
+                        <Column width="4rem" />
+                    </columns>
+
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+
+                                <Input
+                                    value="{form>description}"
+                                    placeholder="Producto o servicio" />
+
+                                <Input
+                                    type="Number"
+                                    value="{form>quantity}"
+                                    change=".onItemChange" />
+
+                                <Input
+                                    type="Number"
+                                    value="{form>unitPrice}"
+                                    change=".onItemChange" />
+
+                                <ObjectNumber
+                                    number="{
+                                        path: 'form>subtotal',
+                                        type: 'sap.ui.model.type.Float',
+                                        formatOptions: {
+                                            minFractionDigits: 2,
+                                            maxFractionDigits: 2
+                                        }
+                                    }"
+                                    unit="PEN" />
+
+                                <Button
+                                    icon="sap-icon://delete"
+                                    type="Transparent"
+                                    tooltip="Eliminar ítem"
+                                    press=".onRemoveItem" />
+
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+
+                </Table>
+
+                <OverflowToolbar>
+                    <ToolbarSpacer />
+
+                    <Label text="Importe total:" />
+
+                    <ObjectNumber
+                        number="{
+                            path: 'form>/totalAmount',
+                            type: 'sap.ui.model.type.Float',
+                            formatOptions: {
+                                minFractionDigits: 2,
+                                maxFractionDigits: 2
+                            }
+                        }"
+                        unit="PEN"
+                        emphasized="true" />
+                </OverflowToolbar>
+
+            </VBox>
+        </content>
+
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+
+                <Button
+                    text="Cancelar"
+                    press=".onNavBack" />
+
+                <Button
+                    text="Guardar borrador"
+                    type="Emphasized"
+                    press=".onSaveDraft" />
+
+            </OverflowToolbar>
+        </footer>
+
+    </Page>
+</mvc:View>

@@ -6,7 +6,10 @@ import SearchField from "sap/m/SearchField";
 import Table from "sap/m/Table";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import MessageToast from "sap/m/MessageToast";
-import ValueState from "sap/ui/core/ValueState";
+import { ValueState } from "sap/ui/core/library";
+import UIComponent from "sap/ui/core/UIComponent";
+import Event from "sap/ui/base/Event";
+
 
 /**
  * @namespace com.portfolio.purchase.purchaserequestfrontend.controller
@@ -14,8 +17,24 @@ import ValueState from "sap/ui/core/ValueState";
 export default class View1 extends Controller {
 
     public onInit(): void {
-        // El modelo OData V4 se configura en manifest.json.
-        // No necesitamos crear un JSONModel.
+
+        const oRouter = UIComponent.getRouterFor(this);
+
+        oRouter.getRoute("RouteView1")?.attachPatternMatched(
+            this.onRouteMatched,
+            this
+        );
+    }
+
+    private onRouteMatched(_oEvent: Event): void {
+
+        const oTable = this.byId("requestsTable") as Table;
+
+        const oBinding = oTable.getBinding("items") as ODataListBinding;
+
+        if (oBinding) {
+            oBinding.refresh();
+        }
     }
 
     public onSearch(): void {
@@ -89,8 +108,7 @@ export default class View1 extends Controller {
     }
 
     public onCreateRequest(): void {
-        MessageToast.show(
-            "Próximamente: crear solicitud de compra"
-        );
+        const oRouter = UIComponent.getRouterFor(this);
+        oRouter.navTo("CreateRequest");
     }
 }
