@@ -10,9 +10,11 @@
         title="Gestión de Solicitudes de Compra">
 
         <content>
+
             <VBox class="sapUiResponsiveContentPadding">
 
                 <OverflowToolbar>
+
                     <Title
                         text="Solicitudes de compra"
                         level="H2" />
@@ -23,55 +25,102 @@
                         text="Nueva solicitud"
                         icon="sap-icon://add"
                         type="Emphasized"
+                        visible="{ui>/isRequester}"
                         press=".onCreateRequest" />
+
                 </OverflowToolbar>
 
-                <Toolbar>
+                <OverflowToolbar>
+
                     <SearchField
                         id="searchField"
                         width="100%"
                         placeholder="Buscar por número de solicitud"
                         liveChange=".onSearch" />
-                </Toolbar>
+
+                    <ToolbarSpacer />
+
+                    <Label
+                        text="Estado:"
+                        visible="{ui>/isApprover}" />
+
+                    <Select
+                        id="statusSelect"
+                        width="11rem"
+                        visible="{ui>/isApprover}"
+                        selectedKey="{ui>/statusFilter}"
+                        change=".onStatusChange">
+
+                        <core:Item
+                            key="SUBMITTED"
+                            text="Pendientes" />
+
+                        <core:Item
+                            key="APPROVED"
+                            text="Aprobadas" />
+
+                        <core:Item
+                            key="REJECTED"
+                            text="Rechazadas" />
+
+                        <core:Item
+                            key="ALL"
+                            text="Todas" />
+
+                    </Select>
+
+                </OverflowToolbar>
 
                 <Table
                     id="requestsTable"
                     growing="true"
                     growingThreshold="10"
+                    autoPopinMode="true"
                     noDataText="No se encontraron solicitudes"
                     items="{/PurchaseRequests}">
 
                     <columns>
-                        <Column>
+
+                        <Column importance="High">
                             <Text text="N° Solicitud" />
                         </Column>
 
-                        <Column>
+                        <Column importance="Medium">
                             <Text text="Fecha" />
                         </Column>
 
-                        <Column>
+                        <Column importance="High">
                             <Text text="Justificación" />
                         </Column>
 
-                        <Column>
+                        <Column importance="High">
                             <Text text="Estado" />
                         </Column>
 
-                        <Column hAlign="End">
+                        <Column
+                            importance="High"
+                            hAlign="End">
                             <Text text="Importe" />
                         </Column>
+
                     </columns>
 
                     <items>
-                        <ColumnListItem type="Navigation" press=".onNavDetail">
+
+                        <ColumnListItem
+                            type="Navigation"
+                            press=".onNavDetail">
+
                             <cells>
+
                                 <ObjectIdentifier
                                     title="{requestNumber}" />
 
                                 <Text text="{requestDate}" />
 
-                                <Text text="{justification}" />
+                                <Text
+                                    text="{justification}"
+                                    wrapping="true" />
 
                                 <ObjectStatus
                                     text="{
@@ -86,14 +135,19 @@
                                 <ObjectNumber
                                     number="{totalAmount}"
                                     unit="PEN" />
+
                             </cells>
+
                         </ColumnListItem>
+
                     </items>
 
                 </Table>
 
             </VBox>
+
         </content>
+
     </Page>
 
 </mvc:View>
