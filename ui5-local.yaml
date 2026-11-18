@@ -40,6 +40,8 @@ server:
         backend:
         - path: /purchase
           url: http://localhost:4004
+        - path: /user
+          url: http://localhost:4004
 builder:
   resources:
     excludes:

@@ -19,6 +19,8 @@ server:
         backend:
         - path: /purchase
           destination: purchase-request-cap
+        - path: /user
+          destination: purchase-request-cap
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

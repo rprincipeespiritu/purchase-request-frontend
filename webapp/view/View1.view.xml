@@ -64,7 +64,7 @@
                     </columns>
 
                     <items>
-                        <ColumnListItem type="Navigation">
+                        <ColumnListItem type="Navigation" press=".onNavDetail">
                             <cells>
                                 <ObjectIdentifier
                                     title="{requestNumber}" />

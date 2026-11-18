@@ -125,6 +125,13 @@
           "target": [
             "TargetCreateRequest"
           ]
+        },
+        {
+          "name": "RequestDetail",
+          "pattern": "detail/{requestId}",
+          "target": [
+            "TargetRequestDetail"
+          ]
         }
       ],
       "targets": {
@@ -135,6 +142,10 @@
         "TargetCreateRequest": {
           "id": "CreateRequest",
           "name": "CreateRequest"
+        },
+        "TargetRequestDetail": {
+          "id": "RequestDetail",
+          "name": "RequestDetail"
         }
       }
     },

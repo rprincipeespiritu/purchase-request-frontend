@@ -9,6 +9,7 @@ import MessageToast from "sap/m/MessageToast";
 import { ValueState } from "sap/ui/core/library";
 import UIComponent from "sap/ui/core/UIComponent";
 import Event from "sap/ui/base/Event";
+import ListItemBase from "sap/m/ListItemBase";
 
 
 /**
@@ -111,4 +112,39 @@ export default class View1 extends Controller {
         const oRouter = UIComponent.getRouterFor(this);
         oRouter.navTo("CreateRequest");
     }
+
+
+    public onNavDetail(oEvent: Event): void {
+
+        // Obtener la fila seleccionada
+        const oItem = oEvent.getSource() as ListItemBase;
+
+        // Obtener el contexto OData de la solicitud
+        const oContext = oItem.getBindingContext();
+
+        if (!oContext) {
+            MessageToast.show(
+                "No se pudo obtener la solicitud seleccionada"
+            );
+            return;
+        }
+
+        // Obtener el UUID de la solicitud
+        const sRequestId = oContext.getProperty("ID") as string;
+
+        if (!sRequestId) {
+            MessageToast.show(
+                "La solicitud no tiene un identificador válido"
+            );
+            return;
+        }
+
+        // Navegar al detalle
+        const oRouter = UIComponent.getRouterFor(this);
+
+        oRouter.navTo("RequestDetail", {
+            requestId: sRequestId
+        });
+    }
+
 }

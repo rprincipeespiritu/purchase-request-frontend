@@ -1,0 +1,156 @@
+
+<mvc:View
+    controllerName="com.portfolio.purchase.purchaserequestfrontend.controller.RequestDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        id="requestDetailPage"
+        title="Detalle de solicitud"
+        showNavButton="true"
+        navButtonPress=".onNavBack">
+
+        <content>
+            <VBox
+                width="100%"
+                class="sapUiResponsiveContentPadding">
+
+                <Panel
+                    width="100%"
+                    class="sapUiMediumMarginBottom">
+
+                    <content>
+                        <ObjectHeader
+                            title="{requestNumber}"
+                            intro="Solicitud de compra"
+                            number="{totalAmount}"
+                            numberUnit="PEN" />
+                    </content>
+                </Panel>
+
+                <Panel
+                    headerText="Información general"
+                    width="100%"
+                    class="sapUiMediumMarginBottom">
+
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+
+                            <Label text="Fecha" />
+                            <Text
+                                text="{requestDate}"
+                                wrapping="true"
+                                class="sapUiTinyMarginBottom" />
+
+                            <Label text="Estado" />
+                            <ObjectStatus
+                                text="{
+                                    path: 'status',
+                                    formatter: '.formatStatusText'
+                                }"
+                                state="{
+                                    path: 'status',
+                                    formatter: '.formatStatusState'
+                                }"
+                                class="sapUiTinyMarginBottom" />
+
+                            <Label text="Justificación" />
+                            <Text
+                                text="{justification}"
+                                wrapping="true" />
+
+                        </VBox>
+                    </content>
+                </Panel>
+
+                <Panel
+                    headerText="Productos solicitados"
+                    width="100%">
+
+                    <content>
+                        <Table
+                            id="requestItemsTable"
+                            width="100%"
+                            items="{items}"
+                            autoPopinMode="true">
+
+                            <columns>
+                                <Column minScreenWidth="Tablet"
+                                        demandPopin="true">
+                                    <Text text="Producto" />
+                                </Column>
+
+                                <Column minScreenWidth="Tablet"
+                                        demandPopin="true">
+                                    <Text text="Cantidad" />
+                                </Column>
+
+                                <Column minScreenWidth="Desktop"
+                                        demandPopin="true">
+                                    <Text text="Precio unitario" />
+                                </Column>
+
+                                <Column hAlign="End">
+                                    <Text text="Subtotal" />
+                                </Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{product}"
+                                              wrapping="true" />
+                                        <Text text="{quantity}" />
+                                        <ObjectNumber
+                                            number="{unitPrice}"
+                                            unit="PEN" />
+                                        <ObjectNumber
+                                            number="{subtotal}"
+                                            unit="PEN" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Panel>
+
+            </VBox>
+        </content>
+
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+
+                <Button
+                    id="btnSubmit"
+                    text="Enviar solicitud"
+                    icon="sap-icon://paper-plane"
+                    type="Emphasized"
+                    visible="{ui>/canSubmit}"
+                    enabled="{= !${ui>/busy} }"
+                    press=".onSubmitRequest" />
+
+                <Button
+                    id="btnApprove"
+                    text="Aprobar"
+                    icon="sap-icon://accept"
+                    type="Accept"
+                    visible="{ui>/canApprove}"
+                    enabled="{= !${ui>/busy} }"
+                    press=".onApproveRequest" />
+
+                <Button
+                    id="btnReject"
+                    text="Rechazar"
+                    icon="sap-icon://decline"
+                    type="Reject"
+                    visible="{ui>/canReject}"
+                    enabled="{= !${ui>/busy} }"
+                    press=".onRejectRequest" />
+
+            </OverflowToolbar>
+        </footer>
+
+    </Page>
+</mvc:View>
