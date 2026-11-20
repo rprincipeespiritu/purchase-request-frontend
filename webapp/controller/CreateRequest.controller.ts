@@ -179,8 +179,14 @@ export default class CreateRequest extends Controller {
         };
 
         try {
-            const oModel =
-                this.getOwnerComponent().getModel() as ODataModel;
+            const oComponent = this.getOwnerComponent();
+
+            if (!oComponent) {
+                throw new Error("No se encontró el componente SAPUI5");
+            }
+
+            const oModel = oComponent.getModel() as ODataModel;
+            // const oModel = this.getOwnerComponent().getModel() as ODataModel;
 
             const oBinding = oModel.bindList(
                 "/PurchaseRequests",

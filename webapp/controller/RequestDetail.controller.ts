@@ -52,9 +52,17 @@ export default class RequestDetail extends Controller {
 
     private async onRouteMatched(event: Event): Promise<void> {
 
-        const args = event.getParameter("arguments") as {
-            requestId: string;
+        const parameters = event.getParameters() as unknown as {
+            arguments: {
+                requestId: string;
+            };
         };
+
+        const args = parameters.arguments;
+
+        // const args = event.getParameter("arguments") as {
+        //     requestId: string;
+        // };
 
         this._requestId = args.requestId;
         const routeVersion = ++this._routeVersion;

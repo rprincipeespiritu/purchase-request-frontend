@@ -12,6 +12,7 @@ import MessageBox from "sap/m/MessageBox";
 import MessageToast from "sap/m/MessageToast";
 import { ValueState } from "sap/ui/core/library";
 import type Event from "sap/ui/base/Event";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 
 interface CurrentUser {
     ID: string;
@@ -75,47 +76,76 @@ export default class View1 extends Controller {
         }
     }
 
+
+
     private async loadCurrentUser(): Promise<void> {
 
-        const response = await fetch(
-            "/user/getCurrentUser()",
-            {
-                method: "GET",
-                headers: {
-                    Accept: "application/json"
-                },
-                credentials: "same-origin"
-            }
-        );
+        const uiModel = this.getView()
+            ?.getModel("ui") as JSONModel;
 
-        if (!response.ok) {
+        uiModel.setProperty("/loaded", false);
+        uiModel.setProperty("/isRequester", false);
+        uiModel.setProperty("/isApprover", false);
+
+        this._currentUser = null;
+
+        const userModel = this.getOwnerComponent()
+            ?.getModel("user") as ODataModel;
+
+        if (!userModel) {
             throw new Error(
-                "Error al obtener el usuario: " +
-                response.status
+                "No se encontró el modelo OData 'user'"
             );
         }
 
-        const user = await response.json() as CurrentUser;
+        // La URL base se obtiene del manifest.json.
+        const operation = userModel.bindContext(
+            "/getCurrentUser(...)"
+        );
+
+        await operation.invoke();
+
+        const context = operation.getBoundContext();
+
+        if (!context) {
+            throw new Error(
+                "UserService no devolvió información"
+            );
+        }
+
+        const user = await context.requestObject() as CurrentUser;
 
         if (
+            !user ||
             typeof user.isRequester !== "boolean" ||
             typeof user.isApprover !== "boolean"
         ) {
             throw new Error(
-                "UserService no devolvió los roles del usuario"
+                "UserService no devolvió roles válidos"
             );
         }
 
         this._currentUser = user;
 
-        const uiModel =
-            this.getView()?.getModel("ui") as JSONModel;
+        uiModel.setProperty(
+            "/isRequester",
+            user.isRequester
+        );
 
-        uiModel.setProperty("/isRequester", user.isRequester);
-        uiModel.setProperty("/isApprover", user.isApprover);
-        uiModel.setProperty("/userName", user.fullName);
+        uiModel.setProperty(
+            "/isApprover",
+            user.isApprover
+        );
+
+        uiModel.setProperty(
+            "/userName",
+            user.fullName ?? ""
+        );
+
         uiModel.setProperty("/loaded", true);
     }
+
+
 
     private applyFilters(): void {
 

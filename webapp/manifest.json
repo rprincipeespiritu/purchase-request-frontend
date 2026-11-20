@@ -37,6 +37,13 @@
         "settings": {
           "odataVersion": "4.0"
         }
+      },
+      "userService": {
+        "uri": "/user/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
       }
     }
   },
@@ -78,6 +85,16 @@
       },
       "": {
         "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "user": {
+        "dataSource": "userService",
         "preload": true,
         "settings": {
           "synchronizationMode": "None",
