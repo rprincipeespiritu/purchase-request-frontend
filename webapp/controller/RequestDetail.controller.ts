@@ -115,29 +115,76 @@ export default class RequestDetail extends Controller {
         }
     }
 
+    // private async loadCurrentUser(): Promise<void> {
+
+    //     const response = await fetch(
+    //         "/user/getCurrentUser()",
+    //         {
+    //             method: "GET",
+    //             headers: {
+    //                 "Accept": "application/json"
+    //             },
+    //             credentials: "same-origin"
+    //         }
+    //     );
+
+    //     if (!response.ok) {
+    //         throw new Error(
+    //             `No se pudo consultar el usuario (${response.status})`
+    //         );
+    //     }
+
+    //     const user = await response.json() as CurrentUser;
+
+    //     this._currentUser = user;
+    // }
+
+
     private async loadCurrentUser(): Promise<void> {
 
-        const response = await fetch(
-            "/user/getCurrentUser()",
-            {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json"
-                },
-                credentials: "same-origin"
-            }
-        );
+        const userModel = this.getOwnerComponent()
+            ?.getModel("user") as ODataModel | undefined;
 
-        if (!response.ok) {
+        if (!userModel) {
             throw new Error(
-                `No se pudo consultar el usuario (${response.status})`
+                "No se encontró el modelo OData 'user'"
             );
         }
 
-        const user = await response.json() as CurrentUser;
+        const operation = userModel.bindContext(
+            "/getCurrentUser(...)"
+        );
 
-        this._currentUser = user;
+        try {
+            await operation.invoke();
+
+            const context = operation.getBoundContext();
+
+            if (!context) {
+                throw new Error(
+                    "UserService no devolvió información"
+                );
+            }
+
+            const user = (await context.requestObject()) as CurrentUser;
+
+            if (
+                !user ||
+                typeof user.isRequester !== "boolean" ||
+                typeof user.isApprover !== "boolean"
+            ) {
+                throw new Error(
+                    "UserService no devolvió roles válidos"
+                );
+            }
+
+            this._currentUser = user;
+
+        } finally {
+            operation.destroy();
+        }
     }
+
 
     private async loadPermissions(): Promise<void> {
 
